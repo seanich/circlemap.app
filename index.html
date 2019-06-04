@@ -1,71 +1,17 @@
 <!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="expires" content="0">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
-        type="text/css">
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            line-height: 1.4;
-        }
-
-        .map {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-        }
-
-        .buttons {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            padding: 0.5rem;
-            background: white;
-            border-radius: 0.25rem;
-        }
-
-        button[type="submit"] {
-            cursor: pointer;
-            border-radius: 0.2rem;
-            border: none;
-            background: #2b578a;
-            font-weight: 400;
-            color: white;
-            padding: 0.3rem 0.6rem;
-        }
-
-        #radius-km {
-            width: 5rem;
-            border-color: #999;
-            border-radius: 0.25rem;
-            border-style: solid;
-            border-width: 1px;
-            padding: 0.2rem;
-        }
-    </style>
-    <title>circlemap.app</title>
-</head>
-
-<body>
-    <div id="map" class="map"></div>
-    <div class="buttons">
-        <form id="radius-form">
-            <input type="number" id="radius-km" value="1" step="0.1" /> km
-            <button type="submit">Update Radius</button>
-        </form>
-    </div>
-    <script type="text/javascript" src="main.js"></script>
-</body>
-
-</html>
+<meta charset="utf-8">
+<meta http-equiv="expires" content="0">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+    type="text/css">
+<title>circlemap.app</title>
+<div id="map" class="map"></div>
+<div class="buttons">
+    <form id="radius-form">
+        <input type="number" id="radius-km" value="1" step="0.1" /> km
+        <button type="submit">Update Radius</button>
+    </form>
+</div>
+<script type="text/javascript" src="main.js"></script>
