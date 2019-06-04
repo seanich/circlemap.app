@@ -14,6 +14,8 @@ import './index.css';
 const MAPBOX_API_TOKEN = 'pk.eyJ1IjoiY2lyY2xlbWFwIiwiYSI6ImNqd2gxbGd6aDA0eXUzeXBvb2M3ajFmaGcifQ.9oDqFAFGpSKcPkCymM1xcA';
 const MAPBOX_STYLE_KEY = 'cjwh1tb69470n1cq9f2922fl5';
 
+const circleColor = [251, 129, 38];
+
 const vectorSource = new VectorSource({ wrapX: false });
 const vectorLayer = new VectorLayer({ source: vectorSource });
 
@@ -22,12 +24,27 @@ const view = new View({
     zoom: 4
 });
 
-const circle = new Feature({
-    geometry: new Circle([0, 0], 1000),
-    name: 'the circle'
+const pointGeom = new Circle([0, 0], 1);
+const point = new Feature({
+    geometry: pointGeom,
+    name: 'the point'
 });
 
-const circleColor = [251, 129, 38];
+point.setStyle(new Style({
+    stroke: new Stroke({
+        color: circleColor,
+        width: 6
+    }),
+    fill: new Fill({
+        color: circleColor
+    })
+}));
+
+const circleGeom = new Circle([0, 0], 1000);
+const circle = new Feature({
+    geometry: circleGeom,
+    name: 'the circle'
+});
 
 circle.setStyle(new Style({
     stroke: new Stroke({
@@ -39,6 +56,7 @@ circle.setStyle(new Style({
 }));
 
 vectorSource.addFeature(circle);
+vectorSource.addFeature(point);
 
 const map = new Map({
     target: 'map',
@@ -69,9 +87,9 @@ function getLocation() {
 function showPosition(position: Position) {
     const radius = parseFloat(radiusInput.value) * 1000;
     const pos = fromLonLat([position.coords.longitude, position.coords.latitude])
-    const geom = new Circle(pos, radius);
-    circle.setGeometry(geom);
-    view.fit(geom.getExtent(), { padding: [10, 10, 10, 10] });
+    circleGeom.setCenterAndRadius(pos, radius)
+    pointGeom.setCenter(pos);
+    view.fit(circleGeom.getExtent(), { padding: [10, 10, 10, 10] });
 }
 
 getLocation();
