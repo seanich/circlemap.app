@@ -8,7 +8,11 @@ import { Circle } from 'ol/geom';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { XYZ, Vector as VectorSource } from 'ol/source';
 import { fromLonLat } from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
+import Geocoder from 'ol-geocoder';
 
+import '~/ol/ol.css';
+import '~/ol-geocoder/dist/ol-geocoder.min.css';
 import './index.css';
 
 const MAPBOX_API_TOKEN = 'pk.eyJ1IjoiY2lyY2xlbWFwIiwiYSI6ImNqd2gxbGd6aDA0eXUzeXBvb2M3ajFmaGcifQ.9oDqFAFGpSKcPkCymM1xcA';
@@ -19,8 +23,10 @@ const circleColor = [251, 129, 38];
 const vectorSource = new VectorSource({ wrapX: false });
 const vectorLayer = new VectorLayer({ source: vectorSource });
 
+let currentPosition = fromLonLat([0, 0]);
+
 const view = new View({
-    center: fromLonLat([0, 0]),
+    center: currentPosition,
     zoom: 4
 });
 
@@ -75,21 +81,45 @@ const radiusInput = document.getElementById('radius-km') as HTMLInputElement;
 const radiusForm = document.getElementById('radius-form');
 radiusForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    getLocation();
+    setPosition(currentPosition);
+});
+const centerOnLocationButton = document.getElementById('center-on-location') as HTMLButtonElement;
+centerOnLocationButton.addEventListener('click', e => {
+    e.preventDefault();
+    centerOnUserLocation();
+})
+
+const geocoder = new Geocoder('nominatim', {
+    provider: 'osm',
+    autoComplete: true,
+    keepOpen: true,
+    preventDefault: true
 });
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    }
+geocoder.on('addresschosen', function (evt: Event & { coordinate: Coordinate }) {
+    setPosition(evt.coordinate);
+});
+
+map.addControl(geocoder);
+
+function getRadius() {
+    return parseFloat(radiusInput.value) * 1000;
 }
 
-function showPosition(position: Position) {
-    const radius = parseFloat(radiusInput.value) * 1000;
-    const pos = fromLonLat([position.coords.longitude, position.coords.latitude])
+function setPosition(pos: Coordinate) {
+    const radius = getRadius();
+    currentPosition = pos;
     circleGeom.setCenterAndRadius(pos, radius)
     pointGeom.setCenter(pos);
     view.fit(circleGeom.getExtent(), { padding: [10, 10, 10, 10] });
 }
 
-getLocation();
+function centerOnUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position: Position) => {
+            setPosition(fromLonLat([position.coords.longitude, position.coords.latitude]));
+        });
+    }
+}
+
+centerOnUserLocation();

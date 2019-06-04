@@ -19,6 +19,7 @@
     "build": "webpack --mode production && cp index.html dist"
   },
   "dependencies": {
-    "ol": "^5.3.3"
+    "ol": "^5.3.3",
+    "ol-geocoder": "^3.2.0"
   }
 }

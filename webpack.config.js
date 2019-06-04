@@ -20,6 +20,9 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            '~': path.resolve('./node_modules')
+        }
     }
 };
