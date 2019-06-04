@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+        type="text/css">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            line-height: 1.4;
+        }
+
+        .map {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .buttons {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.25rem;
+        }
+
+        button[type="submit"] {
+            cursor: pointer;
+            border-radius: 0.2rem;
+            border: none;
+            background: #2b578a;
+            font-weight: 400;
+            color: white;
+            padding: 0.3rem 0.6rem;
+        }
+
+        #radius-km {
+            width: 5rem;
+            border-color: #999;
+            border-radius: 0.25rem;
+            border-style: solid;
+            border-width: 1px;
+            padding: 0.2rem;
+        }
+    </style>
+    <title>circlemap.app</title>
+</head>
+
+<body>
+    <div id="map" class="map"></div>
+    <div class="buttons">
+        <form id="radius-form">
+            <input type="number" id="radius-km" value="1" step="0.1" /> km
+            <button type="submit">Update Radius</button>
+        </form>
+    </div>
+    <script type="text/javascript" src="/main.js"></script>
+</body>
+
+</html>

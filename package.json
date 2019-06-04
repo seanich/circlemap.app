@@ -1,0 +1,19 @@
+{
+  "name": "circlemap",
+  "version": "0.1.0",
+  "main": "index.js",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^1.17.1",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.5.1"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --public 0.0.0.0:8080 --disable-host-check true",
+    "build": "webpack --mode production && cp index.html dist"
+  },
+  "dependencies": {
+    "ol": "^5.3.3"
+  }
+}
