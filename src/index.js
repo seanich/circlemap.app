@@ -1,5 +1,8 @@
 import Feature from 'ol/Feature';
 import Map from 'ol/Map';
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Stroke from 'ol/style/Stroke';
 import View from 'ol/View';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { XYZ, Vector as VectorSource } from 'ol/source';
@@ -33,6 +36,15 @@ const circle = new Feature({
     geometry: new Circle([0, 0], 1000),
     name: 'the circle'
 });
+
+circle.setStyle(new Style({
+    stroke: new Stroke({
+        color: [251, 129, 38]
+    }),
+    fill: new Fill({
+        color: [251, 129, 38, 0.1]
+    })
+}));
 
 vectorSource.addFeature(circle);
 
