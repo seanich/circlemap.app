@@ -11,12 +11,11 @@ import { fromLonLat } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import Geocoder from 'ol-geocoder';
 
+import { MAPBOX_STYLE_KEY, MAPBOX_API_TOKEN } from './config';
+
 import '~/ol/ol.css';
 import '~/ol-geocoder/dist/ol-geocoder.min.css';
 import './index.css';
-
-const MAPBOX_API_TOKEN = 'pk.eyJ1IjoiY2lyY2xlbWFwIiwiYSI6ImNqd2gxbGd6aDA0eXUzeXBvb2M3ajFmaGcifQ.9oDqFAFGpSKcPkCymM1xcA';
-const MAPBOX_STYLE_KEY = 'cjwh1tb69470n1cq9f2922fl5';
 
 const circleColor = [251, 129, 38];
 
