@@ -1,7 +1,10 @@
-html,
+@import './reset.css';
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    padding: 0;
     font-family: sans-serif;
     line-height: 1.4;
 }
@@ -14,15 +17,17 @@ body {
     bottom: 0;
 }
 
-.buttons {
+.floating-control {
     position: absolute;
-    right: 1rem;
-    top: 1rem;
     padding: 0.5rem;
     background: white;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
+    border-radius: 0.1rem;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.buttons {
+    top: 0.5rem;
+    right: 0.5rem;
 }
 
 .buttons > button:first-child {
@@ -39,11 +44,15 @@ body {
     padding: 0.3rem 0.5rem;
 }
 
-#radius-km {
-    width: 5rem;
-    border-color: #999;
+.floating-control input {
+    border-color: #ccc;
     border-radius: 0.25rem;
     border-style: solid;
     border-width: 1px;
     padding: 0.2rem;
 }
+
+.radius-km {
+    width: 5rem;
+}
+

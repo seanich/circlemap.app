@@ -1,124 +1,139 @@
-import Feature from 'ol/Feature';
-import Fill from 'ol/style/Fill';
-import Map from 'ol/Map';
-import Stroke from 'ol/style/Stroke';
-import Style from 'ol/style/Style';
-import View from 'ol/View';
-import { Circle } from 'ol/geom';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import { XYZ, Vector as VectorSource } from 'ol/source';
-import { fromLonLat } from 'ol/proj';
-import { Coordinate } from 'ol/coordinate';
-import Geocoder from 'ol-geocoder';
+import Vue from "vue";
 
-import { MAPBOX_STYLE_KEY, MAPBOX_API_TOKEN } from './config';
+import App from "./App.vue";
+import mapStyle from "./mapStyle";
 
-import '~/ol/ol.css';
-import '~/ol-geocoder/dist/ol-geocoder.min.css';
-import './index.css';
+import "./styles/index.css";
 
-const circleColor = [251, 129, 38];
+const circleColor = `rgb(${[251, 129, 38].join(",")})`;
 
-const vectorSource = new VectorSource({ wrapX: false });
-const vectorLayer = new VectorLayer({ source: vectorSource });
+let map: google.maps.Map;
+let circle: google.maps.Circle;
+let point: google.maps.Circle;
+let currentPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
 
-let currentPosition = fromLonLat([0, 0]);
-
-const view = new View({
-    center: currentPosition,
-    zoom: 4
-});
-
-const pointGeom = new Circle([0, 0], 1);
-const point = new Feature({
-    geometry: pointGeom,
-    name: 'the point'
-});
-
-point.setStyle(new Style({
-    stroke: new Stroke({
-        color: circleColor,
-        width: 6
-    }),
-    fill: new Fill({
-        color: circleColor
-    })
-}));
-
-const circleGeom = new Circle([0, 0], 1000);
-const circle = new Feature({
-    geometry: circleGeom,
-    name: 'the circle'
-});
-
-circle.setStyle(new Style({
-    stroke: new Stroke({
-        color: circleColor
-    }),
-    fill: new Fill({
-        color: [...circleColor, 0.1]
-    })
-}));
-
-vectorSource.addFeature(circle);
-vectorSource.addFeature(point);
-
-const map = new Map({
-    target: 'map',
-    layers: [
-        new TileLayer({
-            source: new XYZ({
-                url: `https://api.mapbox.com/styles/v1/circlemap/${MAPBOX_STYLE_KEY}/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_API_TOKEN}`
-            }),
-        }),
-        vectorLayer
-    ],
-    view
-});
-
-const radiusInput = document.getElementById('radius-km') as HTMLInputElement;
-const radiusForm = document.getElementById('radius-form');
-radiusForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    setPosition(currentPosition);
-});
-const centerOnLocationButton = document.getElementById('center-on-location') as HTMLButtonElement;
-centerOnLocationButton.addEventListener('click', e => {
-    e.preventDefault();
-    centerOnUserLocation();
-})
-
-const geocoder = new Geocoder('nominatim', {
-    provider: 'osm',
-    autoComplete: true,
-    keepOpen: true,
-    preventDefault: true
-});
-
-geocoder.on('addresschosen', function (evt: Event & { coordinate: Coordinate }) {
-    setPosition(evt.coordinate);
-});
-
-map.addControl(geocoder);
-
-function getRadius() {
-    return parseFloat(radiusInput.value) * 1000;
-}
-
-function setPosition(pos: Coordinate) {
-    const radius = getRadius();
-    currentPosition = pos;
-    circleGeom.setCenterAndRadius(pos, radius)
-    pointGeom.setCenter(pos);
-    view.fit(circleGeom.getExtent(), { padding: [10, 10, 10, 10] });
-}
-
-function centerOnUserLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position: Position) => {
-            setPosition(fromLonLat([position.coords.longitude, position.coords.latitude]));
-        });
+const app = new Vue({
+  el: "#app",
+  render: h => h(App),
+  data: {
+    query: "",
+    radiusText: "1"
+  },
+  computed: {
+    radius: function(): number {
+      return parseFloat(this.radiusText) * 1000;
     }
+  },
+  methods: {
+    selectLocation(location: google.maps.LatLngLiteral) {
+      setPosition(location);
+    },
+    updateRadius() {
+      setRadius(this.radius);
+    },
+    centerOnUserLocation() {
+      getUserLocation().then(position => {
+        setPosition({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      });
+    }
+  }
+});
+
+function setRadius(radius: number) {
+  circle.setRadius(radius);
+  fitToCircle();
 }
 
-centerOnUserLocation();
+function setPosition(pos: google.maps.LatLngLiteral) {
+  currentPosition = pos;
+  if (!circle) return;
+  circle.setCenter(pos);
+  point.setCenter(pos);
+  setRadius(app.radius);
+  fitToCircle();
+}
+
+function constrainBounds(
+  target: google.maps.LatLngBounds,
+  container: google.maps.LatLngBounds
+): google.maps.LatLngBounds {
+  const tsw = target.getSouthWest();
+  const tne = target.getNorthEast();
+  const csw = container.getSouthWest();
+  const cne = container.getNorthEast();
+  return new google.maps.LatLngBounds(
+    {
+      lat: Math.max(tsw.lat(), csw.lat()),
+      lng: Math.max(tsw.lng(), csw.lng())
+    },
+    { lat: Math.min(tne.lat(), cne.lat()), lng: Math.min(tne.lng(), cne.lng()) }
+  );
+}
+
+function fitToCircle() {
+  const worldBounds = new google.maps.LatLngBounds(
+    { lat: -80, lng: -170 },
+    { lat: 80, lng: 170 }
+  );
+  const circleBounds = circle.getBounds();
+  map.fitBounds(constrainBounds(circleBounds, worldBounds), 20);
+}
+
+function getUserLocation(): Promise<Position> {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        resolve(position);
+      });
+    } else {
+      reject("Geolocation API not available");
+    }
+  });
+}
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 4,
+    center: currentPosition,
+    styles: mapStyle,
+    controlSize: 25,
+    disableDefaultUI: true,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      position: google.maps.ControlPosition.RIGHT_BOTTOM
+    },
+    zoomControl: true,
+    zoomControlOptions: {
+      position: google.maps.ControlPosition.TOP_LEFT
+    }
+  });
+
+  const commonCircleOptions = {
+    center: map.getCenter(),
+    fillColor: circleColor,
+    strokeColor: circleColor,
+    map
+  };
+
+  circle = new google.maps.Circle({
+    radius: 1000,
+    ...commonCircleOptions,
+    fillOpacity: 0.1,
+    strokeWeight: 1
+  });
+
+  point = new google.maps.Circle({
+    ...commonCircleOptions,
+    radius: 0.1,
+    fillOpacity: 1,
+    strokeWeight: 8
+  });
+
+  app.centerOnUserLocation();
+}
+
+// @ts-ignore
+window.initMap = initMap;

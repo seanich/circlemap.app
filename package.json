@@ -4,22 +4,27 @@
   "main": "index.js",
   "private": true,
   "devDependencies": {
-    "@types/ol": "^5.3.0",
-    "css-loader": "^2.1.1",
+    "@types/googlemaps": "^3.36.4",
+    "@types/lodash": "^4.14.134",
+    "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.17.1",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.1",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.5.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --public 0.0.0.0:8080 --disable-host-check true",
-    "build": "webpack --mode production && cp index.html dist"
+    "dev": "webpack-dev-server --hot --public 0.0.0.0:8088 --disable-host-check true --port 8088",
+    "build": "webpack --mode production"
   },
   "dependencies": {
-    "ol": "^5.3.3",
-    "ol-geocoder": "^3.2.0"
+    "lodash": "^4.17.11",
+    "vue": "^2.6.10"
   }
 }
