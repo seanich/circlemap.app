@@ -1,63 +1,93 @@
 const path = require("path");
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const { VueLoaderPlugin } = require("vue-loader");
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCSJT7q4DMCHZof90eqi_IRAjmIM6WvpYI";
 
-module.exports = {
-  entry: "./src/index.ts",
-  output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "main.js"
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.vue$/,
-        use: "vue-loader"
-      },
-      {
-        test: /\.ts$/,
-        use: {
-          loader: "ts-loader",
-          options: {
-            appendTsSuffixTo: [/\.vue$/]
-          }
+module.exports = function generateConfig(options) {
+  const prod = options.environment === 'production';
+
+  return {
+    entry: "./src/index.ts",
+    mode: prod ? 'production' : 'development',
+    devtool: prod ? 'source-map' : 'eval-source-map',
+    output: {
+      path: path.resolve(__dirname, "./dist"),
+      filename: `[name]${prod ? '.[chunkhash]' : ''}.js`,
+      chunkFilename: `[name]${prod ? '.[chunkhash]' : ''}.js`,
+      sourceMapFilename: `[name]${prod ? '.[chunkhash]' : ''}.js.map`,
+      hashFunction: 'sha256'
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          sourceMap: true
+        }),
+        new OptimizeCSSAssetsPlugin({})
+      ]
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/i,
+          use: prod
+            ? [MiniCssExtractPlugin.loader, 'css-loader']
+            : ['vue-style-loader', 'css-loader?sourceMap']
+
         },
-        exclude: /node_modules/
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: {
-          loader: "file-loader",
-          options: {
-            name: "[name].[ext]?[hash]"
+        {
+          test: /\.vue$/,
+          use: "vue-loader"
+        },
+        {
+          test: /\.ts$/,
+          use: {
+            loader: "ts-loader",
+            options: {
+              appendTsSuffixTo: [/\.vue$/]
+            }
+          },
+          exclude: /node_modules/
+        },
+        {
+          test: /\.(png|jpg|gif|svg)$/,
+          use: {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]?[hash]"
+            }
           }
         }
+      ]
+    },
+    resolve: {
+      extensions: [".ts", ".js", ".vue", ".json"],
+      alias: {
+        vue$: prod ? "vue/dist/vue.min.js" : "vue/dist/vue.esm.js",
       }
+    },
+    devtool: "eval-source-map",
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: prod ? '[name].style.[chunkhash].css' : '[name].style.css',
+        chunkFilename: prod ? '[id].style.[chunkhash].css' : '[id].style.css'
+      }),
+      new VueLoaderPlugin(),
+      new HtmlWebpackPlugin({
+        filename: "index.html",
+        template: "./src/index.html.ejs",
+        inject: 'head',
+        googleMapsKey: GOOGLE_MAPS_API_KEY
+      }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': options.environment
+      })
     ]
-  },
-  resolve: {
-    extensions: [".ts", ".js", ".vue", ".json"],
-    alias: {
-      vue$: "vue/dist/vue.esm.js"
-    }
-  },
-  devtool: "eval-source-map",
-  plugins: [
-    new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "./src/index.html.ejs",
-      googleMapsKey: GOOGLE_MAPS_API_KEY
-    })
-  ]
-};
-
-if (process.env.NODE_ENV === "production") {
-  module.exports.devtool = "source-map";
+  };
 }

@@ -9,8 +9,11 @@
     "css-loader": "^3.0.0",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.7.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "^1.17.1",
     "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.3.0",
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.1",
     "vue-loader": "^15.7.0",
@@ -21,7 +24,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --hot --public 0.0.0.0:8088 --disable-host-check true --port 8088",
-    "build": "webpack --mode production"
+    "build": "NODE_ENV=production webpack --env.environment production"
   },
   "dependencies": {
     "lodash": "^4.17.11",
