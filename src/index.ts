@@ -1,4 +1,5 @@
 import Vue from "vue";
+import loadGoogleMapsApi from 'load-google-maps-api';
 
 import App from "./App.vue";
 import mapStyle from "./mapStyle";
@@ -20,7 +21,7 @@ const app = new Vue({
     radiusText: "1"
   },
   computed: {
-    radius: function(): number {
+    radius: function (): number {
       return parseFloat(this.radiusText) * 1000;
     }
   },
@@ -94,7 +95,7 @@ function getUserLocation(): Promise<Position> {
   });
 }
 
-function initMap() {
+loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 4,
     center: currentPosition,
@@ -133,7 +134,4 @@ function initMap() {
   });
 
   app.centerOnUserLocation();
-}
-
-// @ts-ignore
-window.initMap = initMap;
+});

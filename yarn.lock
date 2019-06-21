@@ -16,12 +16,31 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/googlemaps@*":
+  version "3.36.5"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.36.5.tgz#9fa57d430e4982ce9f2352e1a48dfe5c294fe868"
+  integrity sha512-ft36SAiK2eJIC+dovC8iJNbfREYAq7toDizRttCLV7tX427s72LXwSW9aWjbS+pLRbMhjV29WBR8iGvtytRuNg==
+
 "@types/googlemaps@^3.36.4":
   version "3.36.4"
   resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.36.4.tgz#91dcbfafccc93a6c83bb7c7be7322a7b43dc1560"
   integrity sha512-NKbP/msrLgdPApBFXXPOPQ3N2VexLd4ohe2m0UF0Dv/k4bnWTtUuAa0XS314aICJ6IZ2JrafONSiBBn/WE1iXw==
 
-"@types/lodash@^4.14.134":
+"@types/load-google-maps-api@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@types/load-google-maps-api/-/load-google-maps-api-1.3.0.tgz#40a610653fb5381579c921136186d27b77946c37"
+  integrity sha512-rUvxFoheh57ast18Cn8haBnonEAPxS/WZIcUcg6Vhgh33rjONVD9oBFqiV/JO7j0IgXPgu54BeKft/nm3UYMsg==
+  dependencies:
+    "@types/googlemaps" "*"
+
+"@types/lodash-es@^4.17.3":
+  version "4.17.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
+  integrity sha512-iHI0i7ZAL1qepz1Y7f3EKg/zUMDwDfTzitx+AlHhJJvXwenP682ZyGbgPSc5Ej3eEAKVbNWKFuwOadCj5vBbYQ==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
   version "4.14.134"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.134.tgz#9032b440122db3a2a56200e91191996161dde5b9"
   integrity sha512-2/O0khFUCFeDlbi7sZ7ZFRCcT812fAeOLm7Ev4KbwASkZ575TDrDcY7YyaoHdTOzKcNbfiwLYZqPmoC4wadrsw==
@@ -2637,6 +2656,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
+load-google-maps-api@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/load-google-maps-api/-/load-google-maps-api-1.3.3.tgz#9d3670a05527609ce9b31331bdd5957ddc0343fb"
+  integrity sha512-THOSdgymg98eQz8KcZZ2BGjVQIcpMBMUxjKb+0vkgXPQauK238zMNBgUoQBb9JzoP73J9Qgq9dvyHGu3oYvBMQ==
+
 loader-runner@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.4.0.tgz#ed47066bfe534d7e84c4c7b9998c2a75607d9357"
@@ -2668,6 +2692,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash-es@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
+  integrity sha512-DHb1ub+rMjjrxqlB3H56/6MXtm1lSksDp2rA2cNWjG8mlDUYFhUj3Di2Zn5IwSU87xLv8tNIQ7sSwE/YOX/D/Q==
 
 lodash.memoize@^4.1.2:
   version "4.1.2"

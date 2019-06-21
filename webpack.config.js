@@ -10,7 +10,7 @@ const { VueLoaderPlugin } = require("vue-loader");
 const GOOGLE_MAPS_API_KEY = "AIzaSyCSJT7q4DMCHZof90eqi_IRAjmIM6WvpYI";
 
 module.exports = function generateConfig(options) {
-  const prod = options.environment === 'production';
+  const prod = (options || {}).environment === 'production';
 
   return {
     entry: "./src/index.ts",
@@ -39,7 +39,6 @@ module.exports = function generateConfig(options) {
           use: prod
             ? [MiniCssExtractPlugin.loader, 'css-loader']
             : ['vue-style-loader', 'css-loader?sourceMap']
-
         },
         {
           test: /\.vue$/,
@@ -82,11 +81,10 @@ module.exports = function generateConfig(options) {
       new HtmlWebpackPlugin({
         filename: "index.html",
         template: "./src/index.html.ejs",
-        inject: 'head',
-        googleMapsKey: GOOGLE_MAPS_API_KEY
+        inject: true
       }),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': options.environment
+        'process.env.GOOGLEMAPS_KEY': JSON.stringify(GOOGLE_MAPS_API_KEY)
       })
     ]
   };
