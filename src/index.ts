@@ -43,18 +43,17 @@ const app = new Vue({
   }
 });
 
-function setRadius(radius: number) {
+function setRadius(radius: number, fit = true) {
   circle.setRadius(radius);
-  fitToCircle();
+  if (fit) fitToCircle();
 }
 
-function setPosition(pos: google.maps.LatLngLiteral) {
+function setPosition(pos: google.maps.LatLngLiteral, fit = true) {
   currentPosition = pos;
   if (!circle) return;
   circle.setCenter(pos);
   point.setCenter(pos);
-  setRadius(app.radius);
-  fitToCircle();
+  setRadius(app.radius, fit);
 }
 
 function constrainBounds(
@@ -132,6 +131,11 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     fillOpacity: 1,
     strokeWeight: 8
   });
+
+  google.maps.event.addListener(map, "rightclick", (event: google.maps.visualization.MapsEngineMouseEvent) => {
+    if (!event.latLng) return;
+    setPosition(event.latLng.toJSON(), false);
+  })
 
   app.centerOnUserLocation();
 });
