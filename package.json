@@ -24,7 +24,7 @@
     "webpack-dev-server": "^3.5.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --hot --public 0.0.0.0:8088 --disable-host-check true --port 8088",
+    "dev": "webpack-dev-server --hot",
     "build": "webpack --env.environment production"
   },
   "dependencies": {
