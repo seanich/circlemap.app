@@ -34,7 +34,7 @@
       </form>
     </div>
     <geocoder-input @select-location="$root.selectLocation" />
-    <small class="small-text">or right click the map to set location</small>
+    <small class="small-text">or double click the map to move circle to cursor</small>
   </div>
 </template>
 

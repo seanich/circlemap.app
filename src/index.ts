@@ -95,12 +95,16 @@ function getUserLocation(): Promise<Position> {
 }
 
 loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
+  const mapDiv = document.getElementById("map");
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 4,
     center: currentPosition,
     styles: mapStyle,
+    clickableIcons: false,
     controlSize: 25,
     disableDefaultUI: true,
+    disableDoubleClickZoom: true,
+    draggableCursor: "auto",
     mapTypeControl: true,
     mapTypeControlOptions: {
       position: google.maps.ControlPosition.RIGHT_BOTTOM
@@ -115,6 +119,7 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     center: map.getCenter(),
     fillColor: circleColor,
     strokeColor: circleColor,
+    clickable: false,
     map
   };
 
@@ -122,17 +127,17 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     radius: 1000,
     ...commonCircleOptions,
     fillOpacity: 0.1,
-    strokeWeight: 1
+    strokeWeight: 1,
   });
 
   point = new google.maps.Circle({
     ...commonCircleOptions,
     radius: 0.1,
     fillOpacity: 1,
-    strokeWeight: 8
+    strokeWeight: 8,
   });
 
-  google.maps.event.addListener(map, "rightclick", (event: google.maps.visualization.MapsEngineMouseEvent) => {
+  google.maps.event.addListener(map, "dblclick", (event: google.maps.visualization.MapsEngineMouseEvent) => {
     if (!event.latLng) return;
     setPosition(event.latLng.toJSON(), false);
   })
