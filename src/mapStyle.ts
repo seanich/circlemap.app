@@ -3,48 +3,48 @@ const mapStyle: google.maps.MapTypeStyle[] = [
     featureType: "all",
     stylers: [
       {
-        saturation: 0
+        saturation: 0,
       },
       {
-        hue: "#e7ecf0"
-      }
-    ]
+        hue: "#e7ecf0",
+      },
+    ],
   },
   {
     featureType: "road",
     stylers: [
       {
-        saturation: -70
-      }
-    ]
+        saturation: -70,
+      },
+    ],
   },
   {
     featureType: "transit",
     stylers: [
       {
-        visibility: "off"
-      }
-    ]
+        visibility: "off",
+      },
+    ],
   },
   {
     featureType: "poi",
     stylers: [
       {
-        visibility: "off"
-      }
-    ]
+        visibility: "off",
+      },
+    ],
   },
   {
     featureType: "water",
     stylers: [
       {
-        visibility: "simplified"
+        visibility: "simplified",
       },
       {
-        saturation: -60
-      }
-    ]
-  }
+        saturation: -60,
+      },
+    ],
+  },
 ];
 
 export default mapStyle;

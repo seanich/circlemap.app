@@ -64,15 +64,15 @@ export default Vue.extend({
       query: "",
       resultsVisible: false,
       selectedResultIndex: false as number | false,
-      results: [] as GeocoderResult[]
+      results: [] as GeocoderResult[],
     };
   },
   directives: {
-    ClickOutside
+    ClickOutside,
   },
   methods: {
     onChange: debounce(
-      function() {
+      function () {
         //@ts-ignore
         this.autocompleteResults(this.query);
       },
@@ -80,15 +80,19 @@ export default Vue.extend({
       { maxWait: 600 }
     ),
     resultDown() {
-      this.selectedResultIndex = this.selectedResultIndex === false ? 0 : (this.selectedResultIndex + 1) % this.results.length;
+      this.selectedResultIndex =
+        this.selectedResultIndex === false
+          ? 0
+          : (this.selectedResultIndex + 1) % this.results.length;
     },
     resultUp() {
-      this.selectedResultIndex = (this.selectedResultIndex === false || this.selectedResultIndex === 0)
-        ? this.results.length - 1
-        : this.selectedResultIndex - 1;
+      this.selectedResultIndex =
+        this.selectedResultIndex === false || this.selectedResultIndex === 0
+          ? this.results.length - 1
+          : this.selectedResultIndex - 1;
     },
     resultSelect() {
-      if (this.selectedResultIndex === false) return; 
+      if (this.selectedResultIndex === false) return;
       this.locationClick(this.results[this.selectedResultIndex]);
     },
     showResults() {
@@ -98,9 +102,9 @@ export default Vue.extend({
       this.resultsVisible = false;
     },
     updateGeocoderResults(rawResults: google.maps.GeocoderResult[]) {
-      this.results = rawResults.map(res => ({
+      this.results = rawResults.map((res) => ({
         displayLabel: res.formatted_address,
-        location: res.geometry.location.toJSON()
+        location: res.geometry.location.toJSON(),
       }));
       this.selectedResultIndex = false;
     },
@@ -108,7 +112,7 @@ export default Vue.extend({
       return (
         getGeocoderResults(query)
           //@ts-ignore
-          .then(results => {
+          .then((results) => {
             this.updateGeocoderResults(results);
             return this.results;
           })
@@ -119,8 +123,8 @@ export default Vue.extend({
       this.query = result.displayLabel;
       this.$emit("select-location", result.location);
       this.resultsVisible = false;
-    }
-  }
+    },
+  },
 });
 </script>
 

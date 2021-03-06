@@ -4,13 +4,13 @@
       <button
         v-on:click="$root.centerOnUserLocation"
         title="Jump to current location"
-        style="line-height: 1; margin-right: 0.25rem;"
+        style="line-height: 1; margin-right: 0.25rem"
       >
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 561 561"
-          style="width: 1rem; height: 1rem;"
+          style="width: 1rem; height: 1rem"
           xml:space="preserve"
         >
           <g fill="currentColor">
@@ -34,13 +34,15 @@
       </form>
     </div>
     <geocoder-input @select-location="$root.selectLocation" />
-    <small class="small-text">or double click the map to move circle to cursor</small>
+    <small class="small-text"
+      >or double click the map to move circle to cursor</small
+    >
   </div>
 </template>
 
 <script>
 import GeocoderInput from "./components/GeocoderInput";
 export default {
-  components: { GeocoderInput }
+  components: { GeocoderInput },
 };
 </script>

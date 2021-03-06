@@ -1,5 +1,5 @@
 import Vue from "vue";
-import loadGoogleMapsApi from 'load-google-maps-api';
+import loadGoogleMapsApi from "load-google-maps-api";
 
 import App from "./App.vue";
 import mapStyle from "./mapStyle";
@@ -16,15 +16,15 @@ let currentPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
 
 const app = new Vue({
   el: "#app",
-  render: h => h(App),
+  render: (h) => h(App),
   data: {
     query: "",
-    radiusText: "1"
+    radiusText: "1",
   },
   computed: {
     radius: function (): number {
       return parseFloat(this.radiusText) * 1000;
-    }
+    },
   },
   methods: {
     selectLocation(location: google.maps.LatLngLiteral) {
@@ -34,14 +34,14 @@ const app = new Vue({
       setRadius(this.radius);
     },
     centerOnUserLocation() {
-      getUserLocation().then(position => {
+      getUserLocation().then((position) => {
         setPosition({
           lat: position.coords.latitude,
-          lng: position.coords.longitude
+          lng: position.coords.longitude,
         });
       });
-    }
-  }
+    },
+  },
 });
 
 function setRadius(radius: number, fit = true) {
@@ -68,7 +68,7 @@ function constrainBounds(
   return new google.maps.LatLngBounds(
     {
       lat: Math.max(tsw.lat(), csw.lat()),
-      lng: Math.max(tsw.lng(), csw.lng())
+      lng: Math.max(tsw.lng(), csw.lng()),
     },
     { lat: Math.min(tne.lat(), cne.lat()), lng: Math.min(tne.lng(), cne.lng()) }
   );
@@ -83,12 +83,14 @@ function fitToCircle() {
   map.fitBounds(constrainBounds(circleBounds, worldBounds), 20);
 }
 
-function getUserLocation(): Promise<Position> {
+function getUserLocation(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        resolve(position);
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          resolve(position);
+        }
+      );
     } else {
       reject("Geolocation API not available");
     }
@@ -96,7 +98,7 @@ function getUserLocation(): Promise<Position> {
 }
 
 loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
-  map = new google.maps.Map(mapDiv, {
+  map = new google.maps.Map(mapDiv!, {
     zoom: 4,
     center: currentPosition,
     styles: mapStyle,
@@ -107,12 +109,12 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     draggableCursor: "auto",
     mapTypeControl: true,
     mapTypeControlOptions: {
-      position: google.maps.ControlPosition.RIGHT_BOTTOM
+      position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
     zoomControl: true,
     zoomControlOptions: {
-      position: google.maps.ControlPosition.TOP_LEFT
-    }
+      position: google.maps.ControlPosition.TOP_LEFT,
+    },
   });
 
   const commonCircleOptions = {
@@ -120,7 +122,7 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     fillColor: circleColor,
     strokeColor: circleColor,
     clickable: false,
-    map
+    map,
   };
 
   circle = new google.maps.Circle({
@@ -137,10 +139,14 @@ loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
     strokeWeight: 8,
   });
 
-  google.maps.event.addListener(map, "dblclick", (event: google.maps.visualization.MapsEngineMouseEvent) => {
-    if (!event.latLng) return;
-    setPosition(event.latLng.toJSON(), false);
-  })
+  google.maps.event.addListener(
+    map,
+    "dblclick",
+    (event: google.maps.visualization.MapsEngineMouseEvent) => {
+      if (!event.latLng) return;
+      setPosition(event.latLng.toJSON(), false);
+    }
+  );
 
   app.centerOnUserLocation();
 });
