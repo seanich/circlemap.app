@@ -6,6 +6,7 @@ import mapStyle from "./mapStyle";
 
 import "./styles/index.css";
 
+const mapDiv = document.getElementById("map");
 const circleColor = `rgb(${[251, 129, 38].join(",")})`;
 
 let map: google.maps.Map;
@@ -95,8 +96,7 @@ function getUserLocation(): Promise<Position> {
 }
 
 loadGoogleMapsApi({ key: process.env.GOOGLEMAPS_KEY }).then(function initMap() {
-  const mapDiv = document.getElementById("map");
-  map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(mapDiv, {
     zoom: 4,
     center: currentPosition,
     styles: mapStyle,
